@@ -10,7 +10,7 @@ export const getPopularMovies = async () => {
       page: 1,
     }
   })
-  console.log("getPopularMovies", data);
+  // console.log("getPopularMovies", data);
   return data;
 }
 
@@ -23,7 +23,7 @@ export const searchMovie = async (query, page = 1) => {
       page,
     }
   })
-  console.log("searchMovie", data);
+  // console.log("searchMovie", data);
   return data
 }
 
@@ -33,7 +33,7 @@ export const getMovieDetails = async (id) => {
       api_key: API_KEY,
     }
   })
-  console.log("getMovieDetails", data);
+  // console.log("getMovieDetails", data);
   return data;
 }
 
@@ -43,7 +43,7 @@ export const getMovieCredits = async (id) => {
       api_key: API_KEY,
     }
   })
-  console.log("getMovieCredits", data);
+  // console.log("getMovieCredits", data);
   return data;
 }
 
@@ -53,5 +53,6 @@ export const getMovieReviews = async (id) => {
       api_key: API_KEY,
     }
   })
-  console.log("getMovieReviews", data);
+  // console.log("getMovieReviews", data);
+  return data;
 }

@@ -1,24 +1,21 @@
+import { Homepage } from "pages/Home";
+import { Movies } from "pages/Movies";
 import { getMovieCredits, getMovieDetails, getMovieReviews, getPopularMovies, searchMovie } from "./ApiMovies";
 
 export const App = () => {
-  getPopularMovies()
-  searchMovie("batman", 1)
-  getMovieDetails(268)
-  getMovieCredits(268)
-  getMovieReviews(268)
+  // console.log(getPopularMovies());
+  // console.log(searchMovie("batman", 1));
+  // console.log(getMovieDetails(268));
+  // console.log(getMovieCredits(268));
+  // console.log(getMovieReviews(268));
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
+    <>
+      <div>
+        React homework template
+      </div>
+      <Movies></Movies>
+      <Homepage></Homepage>
+    </>
   );
 };
