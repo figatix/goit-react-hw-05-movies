@@ -17,6 +17,8 @@ export const Movies = () => {
     setReqMovies(requestFilm.results)
   }
 
+  console.log("🚀 ~ file: Movies.jsx:51 ~ Movies ~ reqMovies:", reqMovies)
+
   return (
     <>
       <form onSubmit={onInputSubmit}>
@@ -37,7 +39,7 @@ export const Movies = () => {
         {reqMovies.map(({ id, title }) => {
           return (
             <li key={id}>
-              {title}
+              <p>{title}</p>
             </li>
           )
         })}
@@ -46,3 +48,4 @@ export const Movies = () => {
 
   )
 }
+
