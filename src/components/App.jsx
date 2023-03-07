@@ -4,7 +4,7 @@ import { MovieCast } from "pages/MovieCast";
 import { MovieDetails } from "pages/MovieDetails";
 import { MovieReviews } from "pages/MovieReviews";
 import { Movies } from "pages/Movies";
-import { getMovieCredits, getMovieDetails, getMovieReviews, getPopularMovies, searchMovie } from "./ApiMovies";
+// import { getMovieCredits, getMovieDetails, getMovieReviews, getPopularMovies, searchMovie } from "./ApiMovies";
 
 export const App = () => {
   // console.log(getPopularMovies());
