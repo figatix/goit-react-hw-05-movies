@@ -1,21 +1,26 @@
 import { getMovieDetails } from "components/ApiMovies"
 import { useEffect, useState } from "react"
+import { NavLink, Route, Routes, useParams } from "react-router-dom"
+import { MovieCast } from "./MovieCast"
+import { MovieReviews } from "./MovieReviews"
 
 
-export const MovieDetails = ({ idFilm }) => {
+export const MovieDetails = () => {
   const [filmDetails, setFilmDetails] = useState([])
+  const { detailsId } = useParams();
+  console.log(detailsId);
 
   useEffect(() => {
-
-    const fetchFilmDetails = async () => {
-      const film = await getMovieDetails(idFilm)
-      console.log("film", film);
+    if (!detailsId) return;
+    const fetchFilmDetails = async (detailsId) => {
+      const film = await getMovieDetails(detailsId)
+      // console.log("film", film);
       setFilmDetails(film)
     }
 
-    fetchFilmDetails()
+    fetchFilmDetails(detailsId)
 
-  }, [idFilm])
+  }, [detailsId])
 
   const { genres, overview, title, poster_path, vote_average } = filmDetails;
 
@@ -49,9 +54,21 @@ export const MovieDetails = ({ idFilm }) => {
             Additional information
           </p>
           <ul>
-            <li>CAST</li>
-            <li>REVIEWS</li>
+            <li>
+              <NavLink to="cast">
+                CAST
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="reviews">
+                REVIEWS
+              </NavLink>
+            </li>
           </ul>
+          <Routes>
+            <Route path="cast" element={<MovieCast />} />
+            <Route path="reviews" element={<MovieReviews />} />
+          </Routes>
         </div>
 
       </div>

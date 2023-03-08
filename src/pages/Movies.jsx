@@ -1,5 +1,6 @@
 import { searchMovie } from "components/ApiMovies"
 import { useState } from "react"
+import { Link } from "react-router-dom";
 //  pagination
 const requestPage = 1;
 // 
@@ -39,7 +40,9 @@ export const Movies = () => {
         {reqMovies.map(({ id, title }) => {
           return (
             <li key={id}>
-              <p>{title}</p>
+              <Link to={`/movies/${id}`}>
+                <p>{title}</p>
+              </Link>
             </li>
           )
         })}
