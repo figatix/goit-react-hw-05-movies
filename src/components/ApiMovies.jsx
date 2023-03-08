@@ -56,5 +56,3 @@ export const getMovieReviews = async (id) => {
   // console.log("getMovieReviews", data);
   return data;
 }
-
-// 

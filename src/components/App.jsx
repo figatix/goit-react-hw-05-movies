@@ -1,10 +1,10 @@
 
 import { Homepage } from "pages/Home";
-import { MovieCast } from "pages/MovieCast";
+// import { MovieCast } from "pages/MovieCast";
 import { MovieDetails } from "pages/MovieDetails";
-import { MovieReviews } from "pages/MovieReviews";
+// import { MovieReviews } from "pages/MovieReviews";
 import { Movies } from "pages/Movies";
-import { Link, NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, Route, Routes } from "react-router-dom";
 
 
 // import { getMovieCredits, getMovieDetails, getMovieReviews, getPopularMovies, searchMovie } from "./ApiMovies";
@@ -42,3 +42,5 @@ export const App = () => {
     </>
   );
 };
+
+// 
