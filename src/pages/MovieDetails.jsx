@@ -1,25 +1,24 @@
 import { getMovieDetails, IMAGE_BASE_URL } from "components/ApiMovies"
 import { useEffect, useState } from "react"
-import { NavLink, Route, Routes, useParams } from "react-router-dom"
-import { MovieCast } from "./MovieCast"
-import { MovieReviews } from "./MovieReviews"
+import { Link, NavLink, Outlet, useLocation, useParams } from "react-router-dom"
+
 
 import styled from "styled-components";
 import { toast } from "react-toastify"
 
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
   const [filmDetails, setFilmDetails] = useState([])
   const { detailsId } = useParams();
+  const location = useLocation()
   console.log(detailsId);
+
 
   useEffect(() => {
     if (!detailsId) return;
     const fetchFilmDetails = async (detailsId) => {
-
       try {
         const film = await getMovieDetails(detailsId)
-        // console.log("film", film);
         setFilmDetails(film)
 
       } catch (err) {
@@ -29,37 +28,47 @@ export const MovieDetails = () => {
     }
 
     fetchFilmDetails(detailsId)
-
   }, [detailsId])
 
   const { genres, overview, title, poster_path, vote_average } = filmDetails;
 
-  // console.log(genres);
-  return (
-    <StyledMovieDetailsContainer>
+  if (!poster_path) return null;
 
-      <StyledMainDetailsSection>
-        <StyledPosterImg src={`${IMAGE_BASE_URL}w500${poster_path}`} alt={title} width="500" />
+  console.log(filmDetails);
+  console.log(genres);
+  console.log("location", location);
+
+  const goBack = location.state?.from ?? '/movies';
+
+  return (
+    <MovieDetailsContainer>
+
+      <Link to={goBack}>
+        BACK
+      </Link>
+
+      <MainDetailsSection>
+        <PosterImg src={`${IMAGE_BASE_URL}w500/${poster_path}`} alt={title} width="500" />
         <div>
           <div>
-            <StyledMovieTitle>{title}</StyledMovieTitle>
+            <MovieTitle>{title}</MovieTitle>
             <p>User Score {Math.ceil(vote_average * 10)}%</p>
           </div>
 
-          <StyledOverviewContainer>
-            <StyledOverviewTitle>Overview</StyledOverviewTitle>
+          <OverviewContainer>
+            <OverviewTitle>Overview</OverviewTitle>
             <p>{overview}</p>
-          </StyledOverviewContainer>
+          </OverviewContainer>
 
-          <StyledGenresContainer>
-            <StyledGenresTitle>Genres</StyledGenresTitle>
+          <GenresContainer>
+            <GenresTitle>Genres</GenresTitle>
             <p>{genres && genres.map(({ name }) => `${name} `)}</p>
-          </StyledGenresContainer>
+          </GenresContainer>
         </div>
-      </StyledMainDetailsSection>
+      </MainDetailsSection>
 
-      <StyledAdditionalInfoContainer>
-        <StyledInfoTitle>Additional information</StyledInfoTitle>
+      <AdditionalInfoContainer>
+        <InfoTitle>Additional information</InfoTitle>
         <ul>
           <li>
             <StyledNavLink to="cast">CAST</StyledNavLink>
@@ -68,18 +77,23 @@ export const MovieDetails = () => {
             <StyledNavLink to="reviews">REVIEWS</StyledNavLink>
           </li>
         </ul>
-        <Routes>
+        <Outlet />
+      </AdditionalInfoContainer>
+
+
+      {/* <Routes>
           <Route path="cast" element={<MovieCast />} />
           <Route path="reviews" element={<MovieReviews />} />
-        </Routes>
-      </StyledAdditionalInfoContainer>
-    </StyledMovieDetailsContainer>
+        </Routes> */}
+    </MovieDetailsContainer>
   )
 }
 
+export default MovieDetails;
+
 //
 
-const StyledMovieDetailsContainer = styled.div`
+const MovieDetailsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -87,48 +101,48 @@ const StyledMovieDetailsContainer = styled.div`
   gap: 20px;
 `;
 
-const StyledMainDetailsSection = styled.div`
+const MainDetailsSection = styled.div`
   display: flex;
   gap: 20px;
   padding: 0 30px;
 `;
 
-const StyledPosterImg = styled.img`
+const PosterImg = styled.img`
   width: 300px;
   /* height: 300px; */
 `;
 
-const StyledMovieTitle = styled.h2`
+const MovieTitle = styled.h2`
   font-size: 32px;
   font-weight: bold;
 `;
 
-const StyledOverviewContainer = styled.div`
+const OverviewContainer = styled.div`
   margin-top: 20px;
 `;
 
-const StyledOverviewTitle = styled.h3`
+const OverviewTitle = styled.h3`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
 `;
 
-const StyledGenresContainer = styled.div`
+const GenresContainer = styled.div`
   margin-top: 20px;
 `;
 
-const StyledGenresTitle = styled.h3`
+const GenresTitle = styled.h3`
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
 `;
 
-const StyledAdditionalInfoContainer = styled.div`
+const AdditionalInfoContainer = styled.div`
   padding: 0 20px;
   margin-bottom: 40px;
 `;
 
-const StyledInfoTitle = styled.p`
+const InfoTitle = styled.p`
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;

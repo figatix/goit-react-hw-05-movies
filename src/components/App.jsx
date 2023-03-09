@@ -1,48 +1,34 @@
 
-import { Homepage } from "pages/Home";
-// import { MovieCast } from "pages/MovieCast";
-import { MovieDetails } from "pages/MovieDetails";
-// import { MovieReviews } from "pages/MovieReviews";
-import { Movies } from "pages/Movies";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
-import styled from "styled-components";
+import { Homepage } from "pages/Home";
+// import { MovieDetails } from "pages/MovieDetails";
+import { Movies } from "pages/Movies";
+import { MovieCast } from "pages/MovieCast";
+import { MovieReviews } from "pages/MovieReviews";
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Layout } from "./Layout";
+import { lazy } from "react";
 
-// import { getMovieCredits, getMovieDetails, getMovieReviews, getPopularMovies, searchMovie } from "./ApiMovies";
-
+const MovieDetails = lazy(() => import('../pages/MovieDetails'))
 export const App = () => {
-  // console.log(getPopularMovies());
-  // console.log(searchMovie("batman", 1));
-  // console.log(getMovieDetails(268));
-  // console.log(getMovieCredits(268));
-  // console.log(getMovieReviews(268));
 
   return (
     <>
-      <StyledNav>
-        <StyledNavLink to="/" end>
-          Home
-        </StyledNavLink>
-        <StyledNavLink to="/movies">
-          Movies
-        </StyledNavLink>
-      </StyledNav>
-
       <Routes>
-        <Route path="/" element={<Homepage />} />
-        {/* <Route path="/:detailsId" element={<MovieDetails idFilm={268} />} /> */}
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/movies/:detailsId/*" element={<MovieDetails />} />
-        <Route path="*" element={<Homepage />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Homepage />} />
+          <Route path="/movies" element={<Movies />} />
+          <Route path="/movies/:detailsId/*" element={<MovieDetails />}>
+            <Route path="cast" element={<MovieCast />} />
+            <Route path="reviews" element={<MovieReviews />} />
+          </Route>
+          <Route path="*" element={<Homepage />} />
+        </Route>
       </Routes>
 
-      {/* <MovieReviews idFilm={268}></MovieReviews> */}
-      {/* <MovieCast idFilm={268}></MovieCast> */}
-      {/* <Movies></Movies> */}
-      {/* <MovieDetails idFilm={268}></MovieDetails> */}
-      {/* <Homepage></Homepage> */}
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -58,24 +44,3 @@ export const App = () => {
     </>
   );
 };
-
-//
-
-
-const StyledNav = styled.nav`
-  background-color: #f7f7f7;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 20px;
-  margin-bottom: 40px;
-`;
-
-const StyledNavLink = styled(NavLink)`
-  color: #000;
-  margin-right: 20px;
-  text-decoration: none;
-
-  &.active {
-    font-weight: bold;
-  }
-`;

@@ -1,6 +1,6 @@
 import { searchMovie } from "components/ApiMovies"
 import { useState } from "react"
-import { Link } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 
 import styled from "styled-components";
@@ -9,8 +9,13 @@ import styled from "styled-components";
 const requestPage = 1;
 // 
 export const Movies = () => {
-  const [query, setQuery] = useState('')
   const [reqMovies, setReqMovies] = useState([])
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const queryParams = searchParams.get('query') ?? ''
+  // для контрольованого <input>
+  const [query, setQuery] = useState(queryParams ?? '')
+  // 
+  const location = useLocation()
 
   const onInputChange = (e) => {
     setQuery(e.target.value)
@@ -21,19 +26,20 @@ export const Movies = () => {
     const value = query.toLowerCase().trim()
     console.log(value);
     if (!value) {
-      console.log("UPS");
       toast.warn('Empty input!');
       return
     }
+    setSearchParams({ query: value })
+    console.log(queryParams);
 
     try {
-      const requestFilm = await searchMovie(query, requestPage);
-      setReqMovies(requestFilm.results)
-      if (requestFilm.results.length === 0) {
+      const { results } = await searchMovie(query, requestPage);
+      setReqMovies(results)
+      if (results.length === 0) {
         toast.info('We can`t find anything. Please, try again')
         return
       }
-      toast.success(`We found ${requestFilm.results.length} movies!`)
+      toast.success(`We found ${results.length} movies!`)
 
     } catch (err) {
       console.log(err);
@@ -41,7 +47,32 @@ export const Movies = () => {
     }
   }
 
-  // console.log("🚀 ~ file: Movies.jsx:51 ~ Movies ~ reqMovies:", reqMovies)
+  // useEffect(() => {
+
+  //   const fetchFilm = async (q) => {
+  //     try {
+  //       const { results } = await searchMovie(q, requestPage);
+  //       setReqMovies(results)
+  //       if (results.length === 0) {
+  //         toast.info('We can`t find anything. Please, try again')
+  //         return
+  //       }
+  //       toast.success(`We found ${results.length} movies!`)
+
+  //     } catch (err) {
+  //       console.log(err);
+  //       toast.error(err.message)
+  //     }
+  //   }
+
+  //   fetchFilm(queryParams)
+
+  //   return () => {
+  //     setQuery('')
+  //     setSearchParams({})
+  //   }
+  // }, [queryParams, setSearchParams])
+
 
   return (
     <StyledMoviesContainer>
@@ -61,7 +92,7 @@ export const Movies = () => {
         {reqMovies.map(({ id, title }) => {
           return (
             <StyledMoviesListItem key={id}>
-              <StyledLink to={`/movies/${id}`}>
+              <StyledLink to={`/movies/${id}`} state={{ from: location }}>
                 <StyledTitle>{title}</StyledTitle>
               </StyledLink>
             </StyledMoviesListItem>
