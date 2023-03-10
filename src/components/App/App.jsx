@@ -1,24 +1,23 @@
 
 import { Route, Routes } from "react-router-dom";
-
-import { Homepage } from "pages/Home";
-// import { MovieDetails } from "pages/MovieDetails";
-import { Movies } from "pages/Movies";
-import { MovieCast } from "pages/MovieCast";
-import { MovieReviews } from "pages/MovieReviews";
+import { lazy } from "react";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Layout } from "./Layout";
-import { lazy } from "react";
 
-const MovieDetails = lazy(() => import('../pages/MovieDetails'))
+const SharedLayout = lazy(() => import('../SharedLayout/SharedLayout'))
+const Homepage = lazy(() => import('../../pages/Home/Home'))
+const Movies = lazy(() => import('../../pages/Movies/Movies'))
+const MovieDetails = lazy(() => import('../../pages/MovieDetails/MovieDetails'))
+const MovieCast = lazy(() => import('../../pages/MovieCast/MovieCast'))
+const MovieReviews = lazy(() => import('../../pages/MovieReviews/MovieReviews'))
+
+
 export const App = () => {
-
   return (
     <>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<SharedLayout />}>
           <Route index element={<Homepage />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/movies/:detailsId/*" element={<MovieDetails />}>

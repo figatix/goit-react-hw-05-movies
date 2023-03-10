@@ -1,18 +1,16 @@
-import { getMovieDetails, IMAGE_BASE_URL } from "components/ApiMovies"
-import { useEffect, useState } from "react"
-import { Link, NavLink, Outlet, useLocation, useParams } from "react-router-dom"
+import { getMovieDetails, IMAGE_BASE_URL } from "components/utils/ApiMovies"
+import { Suspense, useEffect, useState } from "react"
+import { Outlet, useLocation, useParams } from "react-router-dom"
 
-
-import styled from "styled-components";
 import { toast } from "react-toastify"
+import { Loader } from "components/Loader";
+import { AdditionalInfoContainer, GenresContainer, GenresTitle, InfoTitle, MainDetailsSection, MovieDetailsContainer, MovieTitle, OverviewContainer, OverviewTitle, PosterImg, StyledLink, StyledNavLink } from "./MovieDetails.styled";
 
 
 const MovieDetails = () => {
   const [filmDetails, setFilmDetails] = useState([])
   const { detailsId } = useParams();
   const location = useLocation()
-  console.log(detailsId);
-
 
   useEffect(() => {
     if (!detailsId) return;
@@ -32,23 +30,23 @@ const MovieDetails = () => {
 
   const { genres, overview, title, poster_path, vote_average } = filmDetails;
 
-  if (!poster_path) return null;
-
-  console.log(filmDetails);
-  console.log(genres);
-  console.log("location", location);
+  const profileImageUrl = poster_path
+    ? `${IMAGE_BASE_URL}w500${poster_path}`
+    : 'https://via.placeholder.com/300x425?text=No+Image';
 
   const goBack = location.state?.from ?? '/movies';
 
   return (
     <MovieDetailsContainer>
 
-      <Link to={goBack}>
+      <StyledLink to={goBack}>
         BACK
-      </Link>
+      </StyledLink>
 
       <MainDetailsSection>
-        <PosterImg src={`${IMAGE_BASE_URL}w500/${poster_path}`} alt={title} width="500" />
+
+        <PosterImg src={profileImageUrl} alt={title} width="500" />
+
         <div>
           <div>
             <MovieTitle>{title}</MovieTitle>
@@ -71,13 +69,23 @@ const MovieDetails = () => {
         <InfoTitle>Additional information</InfoTitle>
         <ul>
           <li>
-            <StyledNavLink to="cast">CAST</StyledNavLink>
+            <StyledNavLink
+              to="cast"
+              state={{ from: location.state?.from }}
+            >
+              CAST
+            </StyledNavLink>
           </li>
           <li>
-            <StyledNavLink to="reviews">REVIEWS</StyledNavLink>
+            <StyledNavLink to="reviews"
+              state={{ from: location.state?.from }}
+            >REVIEWS</StyledNavLink>
           </li>
         </ul>
-        <Outlet />
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
+
       </AdditionalInfoContainer>
 
 
@@ -92,68 +100,3 @@ const MovieDetails = () => {
 export default MovieDetails;
 
 //
-
-const MovieDetailsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-      flex-direction: column;
-  gap: 20px;
-`;
-
-const MainDetailsSection = styled.div`
-  display: flex;
-  gap: 20px;
-  padding: 0 30px;
-`;
-
-const PosterImg = styled.img`
-  width: 300px;
-  /* height: 300px; */
-`;
-
-const MovieTitle = styled.h2`
-  font-size: 32px;
-  font-weight: bold;
-`;
-
-const OverviewContainer = styled.div`
-  margin-top: 20px;
-`;
-
-const OverviewTitle = styled.h3`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const GenresContainer = styled.div`
-  margin-top: 20px;
-`;
-
-const GenresTitle = styled.h3`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const AdditionalInfoContainer = styled.div`
-  padding: 0 20px;
-  margin-bottom: 40px;
-`;
-
-const InfoTitle = styled.p`
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const StyledNavLink = styled(NavLink)`
-  color: #000;
-  margin-right: 20px;
-  text-decoration: none;
-
-  &.active {
-    font-weight: bold;
-  }
-`;
